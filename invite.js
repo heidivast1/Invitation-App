@@ -81,33 +81,31 @@ document.addEventListener('DOMContentLoaded', () => {
       const button = e.target;
       const li = button.parentNode;
       const ul = li.parentNode;
-      function removeName () {
-        ul.removeChild(li);
-      }
-      function editName() {
-        const span = li.firstElementChild;
-        const input = document.createElement('input'); //input elemnt we want to replace the span with
-        input.type = 'text';
-        input.value = span.textContent;
-        li.insertBefore(input, span); //can now use span to place the input eleement into the DOM
-        li.removeChild(span);
-        button.textContent = 'save';
-      }
-      function saveName() {
-        const input = li.firstElementChild;
-        const span = document.createElement('span');
-        span.textContent = input.value;
-        li.insertBefore(span, input); //can now use span to place the input eleement into the DOM
-        li.removeChild(input);
-        button.textContent = 'edit';
-      }
-      if (button.textContent === 'remove') { //if clcik item is button AND text content is remove, THEN the name will be removed
-        removeName();
-      } else if (button.textContent === 'edit') {
-          editName();
-      } else if (button.textContent === 'save') {
-          saveName();
-      }
+      const action = button.textContent;
+      const nameActions = { //This is an object created for refactoring purposed
+        remove: () => {
+          ul.removeChild(li);
+        },
+        edit: () => {
+          const span = li.firstElementChild;
+          const input = document.createElement('input'); //input elemnt we want to replace the span with
+          input.type = 'text';
+          input.value = span.textContent;
+          li.insertBefore(input, span); //can now use span to place the input eleement into the DOM
+          li.removeChild(span);
+          button.textContent = 'save';
+        },
+        save: () => {
+          const input = li.firstElementChild;
+          const span = document.createElement('span');
+          span.textContent = input.value;
+          li.insertBefore(span, input); //can now use span to place the input eleement into the DOM
+          li.removeChild(input);
+          button.textContent = 'edit';
+        }
+      };
+      //select and run action in buttons name
+          nameActions[action]();
     }
   });
 });

@@ -41,31 +41,19 @@ document.addEventListener('DOMContentLoaded', () => {
       return element;
     }
 
+    function appendToLI(elementName, property, value) {
+      const element = createElement(elementName, property, value);
+      li.appendChild(element);
+      return element;
+    }
+
     const li = document.createElement('li');
-
-    const span = createElement('span', 'textContent', text); //REFACTORING
-
-    li.appendChild(span);
-
-    const label = createElement('label', 'textContent', 'Confirmed'); //create label
-    //label.textContent = 'Confirmed'; // label says confriemd
-
-    const checkbox = createElement('input', 'type', 'checkbox'); //input element that is stored in const checkbox
-    //checkbox.type = 'checkbox';
-    //set inputs type to checkbox
-    label.appendChild(checkbox);
-
-    li.appendChild(label);
-
-    const editButton = createElement('button', 'textContent', 'edit'); //code for edit button, but not it's behavior
-    li.appendChild(editButton);
-
-    const removeButton = createElement('button', 'textContent', 'remove'); //code for remove button, but not it's behavior
-    //removeButton.textContent = 'remove';
-
-    li.appendChild(removeButton);
-
-    return li; //because without return js functions return undefined by default
+    appendToLI('span', 'textContent', text);
+    appendToLI('label', 'textContent', 'Confirmed')
+      .appendChild(createElement('input', 'type', 'checkbox'));
+    appendToLI('button', 'textContent', 'edit'); //code for edit button, but not it's behavior
+    appendToLI('button', 'textContent', 'remove');
+    return li;
   }
 
   form.addEventListener('submit', (e) => {
@@ -93,9 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const button = e.target;
       const li = button.parentNode;
       const ul = li.parentNode;
-      if (button.textContent === 'remove') { //if clcik item is button AND text content is remove, THEN the name will be removed
+      function removeName () {
         ul.removeChild(li);
-      } else if (button.textContent === 'edit') {
+      }
+      function editName() {
         const span = li.firstElementChild;
         const input = document.createElement('input'); //input elemnt we want to replace the span with
         input.type = 'text';
@@ -103,13 +92,21 @@ document.addEventListener('DOMContentLoaded', () => {
         li.insertBefore(input, span); //can now use span to place the input eleement into the DOM
         li.removeChild(span);
         button.textContent = 'save';
-      } else if (button.textContent === 'save') {
+      }
+      function saveName() {
         const input = li.firstElementChild;
         const span = document.createElement('span');
         span.textContent = input.value;
         li.insertBefore(span, input); //can now use span to place the input eleement into the DOM
         li.removeChild(input);
         button.textContent = 'edit';
+      }
+      if (button.textContent === 'remove') { //if clcik item is button AND text content is remove, THEN the name will be removed
+        removeName();
+      } else if (button.textContent === 'edit') {
+          editName();
+      } else if (button.textContent === 'save') {
+          saveName();
       }
     }
   });
